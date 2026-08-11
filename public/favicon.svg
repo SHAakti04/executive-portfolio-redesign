@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="gsGradient" x1="10" y1="8" x2="54" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2F7BFF"/>
+      <stop offset="1" stop-color="#4FA3FF"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#2F7BFF" flood-opacity="0.55"/>
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="48" height="48" rx="14" fill="url(#gsGradient)" filter="url(#shadow)"/>
+  <text
+    x="32"
+    y="39"
+    text-anchor="middle"
+    font-family="Inter, Arial, sans-serif"
+    font-size="21"
+    font-weight="800"
+    fill="white"
+  >GS</text>
+</svg>
