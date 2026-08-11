@@ -42,7 +42,7 @@ export function CallButton() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-full"
         style={{
-          boxShadow: "0 0 0 0 rgba(79, 163, 255, 0.55)",
+          boxShadow: "0 0 0 0 rgba(201, 160, 99, 0.55)",
           animation: "call-pulse 2.6s cubic-bezier(0.66, 0, 0, 1) infinite",
         }}
       />
@@ -52,19 +52,19 @@ export function CallButton() {
       </span>
       {/* button */}
       <span
-        className="relative grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(79,163,255,0.65)] transition-transform duration-300 group-hover:scale-110 group-active:scale-95"
+        className="relative grid h-14 w-14 place-items-center rounded-full text-[color:var(--navy-deep)] shadow-[0_10px_30px_-6px_rgba(201,160,99,0.65)] transition-transform duration-300 group-hover:scale-110 group-active:scale-95"
         style={{
           background:
-            "radial-gradient(circle at 30% 25%, #6fb4ff 0%, #2F7BFF 55%, #1e50c8 100%)",
+            "radial-gradient(circle at 30% 25%, #e6cb9b 0%, #c9a063 55%, #9c7736 100%)",
         }}
       >
         <Phone className="h-6 w-6" strokeWidth={2.25} />
       </span>
       <style>{`
         @keyframes call-pulse {
-          0%   { box-shadow: 0 0 0 0 rgba(79, 163, 255, 0.55); }
-          70%  { box-shadow: 0 0 0 18px rgba(79, 163, 255, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(79, 163, 255, 0); }
+          0%   { box-shadow: 0 0 0 0 rgba(201, 160, 99, 0.55); }
+          70%  { box-shadow: 0 0 0 18px rgba(201, 160, 99, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(201, 160, 99, 0); }
         }
       `}</style>
     </a>
