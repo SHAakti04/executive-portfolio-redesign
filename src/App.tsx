@@ -39,6 +39,8 @@ import ngoSessionImage from "@/assets/ngo-session.jpg";
 import sosVillageImage from "@/assets/sos-village.jpg";
 import pressMarathiImage from "@/assets/press-marathi.jpg";
 import aboutVisualImage from "@/assets/about-visual.jpg";
+import heroDeskAsset from "@/assets/hero-desk.png.asset.json";
+import philosophyPortraitAsset from "@/assets/philosophy-portrait.png.asset.json";
 
 const imageUrls = {
   headshot: headshotImage,
@@ -48,6 +50,8 @@ const imageUrls = {
   sosVillage: sosVillageImage,
   pressMarathi: pressMarathiImage,
   aboutVisual: aboutVisualImage,
+  heroDesk: heroDeskAsset.url,
+  philosophyPortrait: philosophyPortraitAsset.url,
 };
 
 const NAV_LINKS = [
