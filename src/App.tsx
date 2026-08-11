@@ -243,14 +243,28 @@ function Hero() {
       mm.add("(min-width: 768px)", () => {
         const shell = portraitRef.current;
         if (!shell) return;
+        const img = shell.querySelector("img");
         const t = gsap.to(shell, {
-          yPercent: 9,
+          yPercent: 7,
           ease: "none",
           scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: 0.6 },
         });
+        const t2 = img
+          ? gsap.fromTo(
+              img,
+              { scale: 1.12 },
+              {
+                scale: 1.24,
+                ease: "none",
+                scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: 0.8 },
+              },
+            )
+          : null;
         return () => {
           t.scrollTrigger?.kill();
           t.kill();
+          t2?.scrollTrigger?.kill();
+          t2?.kill();
         };
       });
 
