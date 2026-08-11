@@ -350,13 +350,14 @@ function Hero() {
         <div ref={portraitRef} className="hero-portrait relative mx-auto w-full max-w-[19rem] sm:max-w-[22rem]">
           <span className="pointer-events-none absolute -left-4 -top-4 hidden h-32 w-32 border-l border-t border-[color:var(--gold)]/50 sm:block" />
           <span className="pointer-events-none absolute -bottom-4 -right-4 hidden h-32 w-32 border-b border-r border-[color:var(--gold)]/50 sm:block" />
-          <div className="relative overflow-hidden">
+          <div className="relative overflow-hidden bg-[color:var(--navy-deep)]">
             <img
               src={imageUrls.headshot}
               alt="Gurpreet Singh Bahara, Founder & CEO of Kefaru Technologies"
-              className="hero-portrait-image aspect-square w-full object-cover object-top"
+              className="hero-portrait-image aspect-square w-full object-cover object-top mix-blend-luminosity opacity-90 [filter:contrast(1.05)_saturate(0.9)]"
             />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)]/70 via-transparent to-transparent" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)] via-[color:var(--navy-deep)]/25 to-[color:var(--gold)]/10" />
+            <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[color:var(--gold)]/25" />
           </div>
         </div>
       </div>
