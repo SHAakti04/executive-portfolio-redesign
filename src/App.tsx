@@ -1456,6 +1456,7 @@ function useCardHoverMicroInteractions() {
 
 export default function App() {
   useCardHoverMicroInteractions();
+  useAdvancedSectionFX();
 
   useEffect(() => {
     const { ScrollTrigger } = ensureGsap();
