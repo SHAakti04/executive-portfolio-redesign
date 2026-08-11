@@ -25,7 +25,7 @@ export function ParticleField({
   density = 5,
   maxParticles = 80,
   linkDistance = 140,
-  color = "79, 163, 255", // matches --electric-bright roughly
+  color = "201, 160, 99", // champagne gold accent
 }: Props) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
