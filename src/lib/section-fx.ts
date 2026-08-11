@@ -44,7 +44,7 @@ export function useAdvancedSectionFX() {
         });
 
         /* ---- Images: curtain reveal + parallax scrub ---- */
-        document.querySelectorAll<HTMLImageElement>("section img").forEach((img) => {
+        document.querySelectorAll<HTMLImageElement>("section:not(#top) img").forEach((img) => {
           const wrap = img.parentElement;
           if (!wrap) return;
           gsap.set(wrap, { overflow: "hidden" });
@@ -104,7 +104,7 @@ export function useAdvancedSectionFX() {
         }
 
         /* ---- Gold rules: draw-in ---- */
-        document.querySelectorAll<HTMLElement>("section .rule-gold").forEach((rule) => {
+        document.querySelectorAll<HTMLElement>("section:not(#top) .rule-gold").forEach((rule) => {
           gsap.fromTo(
             rule,
             { scaleX: 0, transformOrigin: "0% 50%" },
