@@ -282,23 +282,7 @@ function Hero() {
       />
       <ParticleField className="z-[1]" />
 
-      {/* Editorial portrait — full-bleed on the right, layered behind the type on mobile */}
-      <div
-        ref={portraitRef}
-        className="hero-portrait pointer-events-none absolute inset-y-0 right-0 z-[1] w-full opacity-100 md:w-[58%] lg:w-[52%]"
-      >
-        <div className="relative h-full w-full">
-          <img
-            src={imageUrls.headshot}
-            alt="Gurpreet Singh Bahara, Founder & CEO of Kefaru Technologies"
-            className="hero-portrait-image h-full w-full object-cover object-[62%_22%] md:object-[center_18%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--navy-deep)] via-[color:var(--navy-deep)]/85 to-[color:var(--navy-deep)]/25 md:via-[color:var(--navy-deep)]/55 md:to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)] via-transparent to-[color:var(--navy-deep)]/70" />
-        </div>
-      </div>
-
-      <div className="relative z-[3] mx-auto w-full max-w-[88rem] px-5 pb-24 pt-6 sm:px-8 sm:pb-28">
+      <div className="relative z-[3] mx-auto grid w-full max-w-[88rem] grid-cols-1 items-center gap-12 px-5 pb-24 pt-6 sm:px-8 sm:pb-28 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
         <div className="max-w-3xl">
           <div className="hero-kicker flex items-center gap-3">
             <span className="h-px w-10 rule-gold" />
@@ -360,6 +344,19 @@ function Hero() {
             <span>Pune · India</span>
             <span className="hidden h-px w-8 bg-white/20 sm:block" />
             <span>USA · Canada · Europe · Asia</span>
+          </div>
+        </div>
+
+        <div ref={portraitRef} className="hero-portrait relative mx-auto w-full max-w-[22rem] sm:max-w-[24rem] lg:max-w-none">
+          <span className="pointer-events-none absolute -left-4 -top-4 hidden h-32 w-32 border-l border-t border-[color:var(--gold)]/50 sm:block" />
+          <span className="pointer-events-none absolute -bottom-4 -right-4 hidden h-32 w-32 border-b border-r border-[color:var(--gold)]/50 sm:block" />
+          <div className="relative overflow-hidden">
+            <img
+              src={imageUrls.aboutVisual}
+              alt="Gurpreet Singh Bahara, Founder & CEO of Kefaru Technologies"
+              className="hero-portrait-image aspect-[4/5] w-full object-cover object-top"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)]/70 via-transparent to-transparent" />
           </div>
         </div>
       </div>
@@ -460,10 +457,10 @@ function Story() {
           <figure className="relative">
             <div className="absolute -left-4 -top-4 hidden h-40 w-40 border border-[color:var(--gold)]/40 sm:block" />
             <img
-              src={imageUrls.aboutVisual}
+              src={imageUrls.headshot}
               alt="Gurpreet Singh Bahara, technology entrepreneur and business strategist"
               loading="lazy"
-              className="relative aspect-[4/5] w-full object-cover shadow-[var(--shadow-editorial)]"
+              className="relative aspect-square w-full max-w-md object-cover shadow-[var(--shadow-editorial)]"
             />
           </figure>
         </Reveal>
