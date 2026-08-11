@@ -347,14 +347,14 @@ function Hero() {
           </div>
         </div>
 
-        <div ref={portraitRef} className="hero-portrait relative mx-auto w-full max-w-[22rem] sm:max-w-[24rem] lg:max-w-none">
+        <div ref={portraitRef} className="hero-portrait relative mx-auto w-full max-w-[19rem] sm:max-w-[22rem]">
           <span className="pointer-events-none absolute -left-4 -top-4 hidden h-32 w-32 border-l border-t border-[color:var(--gold)]/50 sm:block" />
           <span className="pointer-events-none absolute -bottom-4 -right-4 hidden h-32 w-32 border-b border-r border-[color:var(--gold)]/50 sm:block" />
           <div className="relative overflow-hidden">
             <img
-              src={imageUrls.aboutVisual}
+              src={imageUrls.headshot}
               alt="Gurpreet Singh Bahara, Founder & CEO of Kefaru Technologies"
-              className="hero-portrait-image aspect-[4/5] w-full object-cover object-top"
+              className="hero-portrait-image aspect-square w-full object-cover object-top"
             />
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)]/70 via-transparent to-transparent" />
           </div>
@@ -457,10 +457,10 @@ function Story() {
           <figure className="relative">
             <div className="absolute -left-4 -top-4 hidden h-40 w-40 border border-[color:var(--gold)]/40 sm:block" />
             <img
-              src={imageUrls.headshot}
-              alt="Gurpreet Singh Bahara, technology entrepreneur and business strategist"
+              src={imageUrls.aboutVisual}
+              alt="Enterprise technology and digital transformation work led by Gurpreet Singh Bahara"
               loading="lazy"
-              className="relative aspect-square w-full max-w-md object-cover shadow-[var(--shadow-editorial)]"
+              className="relative aspect-[4/5] w-full object-cover shadow-[var(--shadow-editorial)]"
             />
           </figure>
         </Reveal>
