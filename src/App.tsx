@@ -275,6 +275,16 @@ function Hero() {
       className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 sm:pt-32"
       style={{ background: "var(--gradient-hero)" }}
     >
+      <div ref={portraitRef} className="hero-portrait pointer-events-none absolute inset-0 z-0">
+        <img
+          src={imageUrls.heroDesk}
+          alt="Gurpreet Singh Bahara at his desk, Founder & CEO of Kefaru Technologies"
+          fetchPriority="high"
+          className="hero-portrait-image h-full w-full object-cover object-[70%_center] opacity-[0.55] [filter:contrast(1.05)_saturate(0.85)] sm:opacity-70 lg:object-[75%_center]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--navy-deep)] via-[color:var(--navy-deep)]/85 to-[color:var(--navy-deep)]/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)] via-transparent to-[color:var(--navy-deep)]/70" />
+      </div>
       <div className="pointer-events-none absolute -left-48 top-24 h-[520px] w-[520px] rounded-full bg-[color:var(--gold)]/10 blur-3xl animate-ambient" />
       <div className="pointer-events-none absolute -right-40 bottom-0 h-[560px] w-[560px] rounded-full bg-[color:var(--gold-deep)]/12 blur-3xl animate-ambient-2" />
       <div
@@ -286,7 +296,7 @@ function Hero() {
       />
       <ParticleField className="z-[1]" />
 
-      <div className="relative z-[3] mx-auto grid w-full max-w-[88rem] grid-cols-1 items-center gap-12 px-5 pb-24 pt-6 sm:px-8 sm:pb-28 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
+      <div className="relative z-[3] mx-auto grid w-full max-w-[88rem] grid-cols-1 items-center gap-12 px-5 pb-24 pt-6 sm:px-8 sm:pb-28 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
         <div className="max-w-3xl">
           <div className="hero-kicker flex items-center gap-3">
             <span className="h-px w-10 rule-gold" />
@@ -351,19 +361,7 @@ function Hero() {
           </div>
         </div>
 
-        <div ref={portraitRef} className="hero-portrait relative mx-auto w-full max-w-[19rem] sm:max-w-[22rem]">
-          <span className="pointer-events-none absolute -left-4 -top-4 hidden h-32 w-32 border-l border-t border-[color:var(--gold)]/50 sm:block" />
-          <span className="pointer-events-none absolute -bottom-4 -right-4 hidden h-32 w-32 border-b border-r border-[color:var(--gold)]/50 sm:block" />
-          <div className="relative overflow-hidden bg-[color:var(--navy-deep)]">
-            <img
-              src={imageUrls.headshot}
-              alt="Gurpreet Singh Bahara, Founder & CEO of Kefaru Technologies"
-              className="hero-portrait-image aspect-square w-full object-cover object-top mix-blend-luminosity opacity-90 [filter:contrast(1.05)_saturate(0.9)]"
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)] via-[color:var(--navy-deep)]/25 to-[color:var(--gold)]/10" />
-            <div className="pointer-events-none absolute inset-0 ring-1 ring-inset ring-[color:var(--gold)]/25" />
-          </div>
-        </div>
+        <div className="pointer-events-none hidden lg:block" aria-hidden="true" />
       </div>
 
       <div className="pointer-events-none absolute bottom-7 left-1/2 z-[3] -translate-x-1/2 text-white/35">
