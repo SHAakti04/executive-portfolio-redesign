@@ -40,6 +40,7 @@ import sosVillageImage from "@/assets/sos-village.jpg";
 import pressMarathiImage from "@/assets/press-marathi.jpg";
 import aboutVisualImage from "@/assets/about-visual.jpg";
 import heroDeskAsset from "@/assets/hero-desk.png.asset.json";
+import { useAdvancedSectionFX } from "@/lib/section-fx";
 import philosophyPortraitAsset from "@/assets/philosophy-portrait.png.asset.json";
 
 const imageUrls = {
