@@ -474,10 +474,10 @@ function Story() {
           <figure className="relative">
             <div className="absolute -left-4 -top-4 hidden h-40 w-40 border border-[color:var(--gold)]/40 sm:block" />
             <img
-              src={imageUrls.aboutVisual}
-              alt="Enterprise technology and digital transformation work led by Gurpreet Singh Bahara"
+              src={imageUrls.philosophyPortrait}
+              alt="Gurpreet Singh Bahara, technology entrepreneur and Chairman of Sardar Swaran Singh's Anandvan"
               loading="lazy"
-              className="relative aspect-[4/5] w-full object-cover shadow-[var(--shadow-editorial)]"
+              className="relative aspect-[4/5] w-full object-cover object-top shadow-[var(--shadow-editorial)]"
             />
           </figure>
         </Reveal>
