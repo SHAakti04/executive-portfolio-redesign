@@ -1,8 +1,10 @@
 <?php
 return [
     'tenant_id' =>'c1c50380-8ff2-46bd-baf9-bb21975b057e',
-    'client_id' =>'475ea2f2-ba6e-458e-87be-e51e5e164f74',
-    'client_secret' =>'38de8e98-c237-41f0-a3d4-da95f539f6b0',
+    'client_id' =>'d719f858-9182-43be-90c4-faaac5bcabc6',
+    'client_secret' =>'GeL8Q~FMleOSvg0irKMxmcCEuixUID_3.zdH3beF',
     'sender_email' => 'gs@kefaru.com',
     'recipient_email' => 'gs@kefaru.com',
+    'debug_email_errors' => true,
+    'config_version' => '2026-08-11-secret-rotation-1',
 ];

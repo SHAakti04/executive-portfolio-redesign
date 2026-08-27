@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 
 const WA_URL =
   "https://wa.me/919561097388?text=" +
-  encodeURIComponent(
-    "Hi Gurpreet, I came across your portfolio and would like to connect.",
-  );
+  encodeURIComponent("Hi Gurpreet, I came across your portfolio and would like to connect.");
 
 export function WhatsAppButton() {
   const [mounted, setMounted] = useState(false);
@@ -43,15 +41,14 @@ export function WhatsAppButton() {
       </span>
       {/* button */}
       <span
-        className="relative grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform duration-300 group-hover:scale-110 group-active:scale-95"
+        className="relative flex h-14 w-14 items-center justify-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform duration-300 group-hover:scale-110 group-active:scale-95"
         style={{
-          background:
-            "radial-gradient(circle at 30% 25%, #4ade80 0%, #25D366 55%, #128C7E 100%)",
+          background: "radial-gradient(circle at 30% 25%, #4ade80 0%, #25D366 55%, #128C7E 100%)",
         }}
       >
         <svg
           viewBox="0 0 32 32"
-          className="h-7 w-7"
+          className="h-7 w-7 translate-x-[1px] translate-y-[1px]"
           fill="currentColor"
           aria-hidden="true"
         >

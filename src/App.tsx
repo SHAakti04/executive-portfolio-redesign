@@ -1,4 +1,11 @@
-import { useEffect, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 import {
   Mail,
   Phone,
@@ -16,50 +23,61 @@ import {
   Sparkles,
   Instagram,
   Facebook,
-  Twitter,
   Youtube,
   Linkedin,
   Quote,
   ChevronRight,
-  Mic,
+  Video,
   Menu,
   X,
+  Eye,
 } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { useCountUpOnScroll } from "@/hooks/use-in-view";
-import { ParticleField } from "@/components/ParticleField";
 import { CallButton } from "@/components/CallButton";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ensureGsap, prefersReducedMotion } from "@/lib/gsap";
 
 import headshotImage from "@/assets/headshot.jpg";
-import worldMapImage from "@/assets/world-map.jpg";
+import worldMapImage from "@/assets/world-map.png";
 import smbGrowthImage from "@/assets/smb-growth.jpg";
+import quoteBackgroundImage from "@/assets/quoteBackground.png";
+import kefaruTechImage from "@/assets/kefarutech.png";
+import anandvanImage from "@/assets/anandvan.png";
 import ngoSessionImage from "@/assets/ngo-session.jpg";
 import sosVillageImage from "@/assets/sos-village.jpg";
 import pressMarathiImage from "@/assets/press-marathi.jpg";
 import aboutVisualImage from "@/assets/about-visual.jpg";
 import heroDeskImage from "@/assets/hero-desk.jpg";
+import heroPortraitImage from "@/assets/hero.png";
+import wordMapPdfImage from "@/assets/wordmap2.png";
 import philosophyPortraitImage from "@/assets/philosophy-portrait.jpg";
+import gsPhilosophyImage from "@/assets/gs-philosophy.png";
 import { useAdvancedSectionFX } from "@/lib/section-fx";
 
 const imageUrls = {
   headshot: headshotImage,
   worldMap: worldMapImage,
   smbGrowth: smbGrowthImage,
+  quoteBackground: quoteBackgroundImage,
+  kefaruTech: kefaruTechImage,
+  anandvan: anandvanImage,
   ngoSession: ngoSessionImage,
   sosVillage: sosVillageImage,
   pressMarathi: pressMarathiImage,
   aboutVisual: aboutVisualImage,
   heroDesk: heroDeskImage,
+  heroPortrait: heroPortraitImage,
+  wordMapPdf: wordMapPdfImage,
   philosophyPortrait: philosophyPortraitImage,
+  gsPhilosophy: gsPhilosophyImage,
 };
 
 const NAV_LINKS = [
-  ["Home", "top"],
-  ["Story", "story"],
-  ["Impact", "impact"],
-  ["Conversations", "conversations"],
+  ["About", "story"],
+  ["Experience", "journey"],
+  ["Blogs", "blogs"],
+  ["Podcast", "podcast"],
   ["Contact", "contact"],
 ] as const;
 
@@ -109,7 +127,7 @@ function Nav() {
       <div className="mx-auto flex max-w-[88rem] items-center justify-between gap-4 px-5 py-4 sm:px-8">
         <a href="#top" onClick={close} className="nav-item min-w-0 shrink-0">
           <span className="font-script text-[1.9rem] leading-none text-[color:var(--gold-soft)] sm:text-4xl">
-            Gurpreet Singh
+            Gurpreet Bahara
           </span>
         </a>
 
@@ -126,12 +144,7 @@ function Nav() {
           ))}
         </nav>
 
-        <a
-          href="#contact"
-          className="nav-item eyebrow hidden shrink-0 border border-[color:var(--gold)]/60 px-5 py-2.5 text-[color:var(--gold-soft)] transition-all duration-300 hover:bg-[color:var(--gold)] hover:text-[color:var(--navy-deep)] lg:inline-flex"
-        >
-          Get in Touch
-        </a>
+
 
         <button
           type="button"
@@ -176,212 +189,77 @@ const ROLES = ["Founder", "CEO", "Technologist", "Chairman"];
 
 function Hero() {
   const rootRef = useRef<HTMLElement | null>(null);
-  const portraitRef = useRef<HTMLDivElement | null>(null);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const { gsap, ScrollTrigger, SplitText } = ensureGsap();
+    const { gsap } = ensureGsap();
     const reduced = prefersReducedMotion();
 
     const ctx = gsap.context(() => {
-      const kicker = root.querySelector(".hero-kicker");
-      const roles = root.querySelectorAll(".hero-role-item");
-      const roleWrap = root.querySelector(".hero-role");
-      const words = root.querySelectorAll(".hero-name-word");
-      const title = root.querySelector(".hero-title");
-      const copies = root.querySelectorAll(".hero-copy");
-      const actions = root.querySelector(".hero-actions");
-      const meta = root.querySelector(".hero-meta");
-      const portrait = root.querySelector(".hero-portrait");
-
-      const all = [kicker, roleWrap, title, actions, meta, portrait].filter(Boolean);
+      const animated = root.querySelectorAll(
+        ".hero-kicker, .hero-title, .hero-copy, .hero-actions, .hero-role, .hero-portrait",
+      );
 
       if (reduced) {
-        gsap.set([...all, ...Array.from(copies), ...Array.from(words), ...Array.from(roles)], {
-          opacity: 1,
-          y: 0,
-          clearProps: "transform",
-        });
+        gsap.set(animated, { opacity: 1, y: 0, clearProps: "transform" });
         return;
       }
 
-      gsap.set([kicker, roleWrap, actions, meta, ...Array.from(copies)], { opacity: 0, y: 18 });
-      gsap.set(portrait, { opacity: 0, y: 26, scale: 0.98 });
-      gsap.set(title, { opacity: 1 });
-
-      let splits: Array<InstanceType<typeof SplitText>> = [];
-      try {
-        splits = Array.from(words).map(
-          (w) => new SplitText(w as HTMLElement, { type: "chars", charsClass: "hero-char" }),
-        );
-      } catch {
-        splits = [];
-      }
-      const chars = splits.flatMap((s) => s.chars ?? []);
-
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.to(kicker, { opacity: 1, y: 0, duration: 0.6 }, 0.05);
-      tl.to(roleWrap, { opacity: 1, y: 0, duration: 0.6 }, 0.15);
-      tl.fromTo(
-        roles,
-        { opacity: 0, y: 8 },
-        { opacity: 1, y: 0, duration: 0.5, stagger: 0.08 },
-        0.2,
+      gsap.fromTo(
+        animated,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.72, stagger: 0.08, ease: "power3.out" },
       );
-      if (chars.length) {
-        gsap.set(chars, { opacity: 0, yPercent: 70 });
-        tl.to(chars, { opacity: 1, yPercent: 0, duration: 0.9, stagger: 0.022 }, 0.35);
-      } else {
-        gsap.fromTo(title, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9, delay: 0.35 });
-      }
-      tl.to(portrait, { opacity: 1, y: 0, scale: 1, duration: 1.2 }, 0.3);
-      tl.to(copies, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 }, 0.85);
-      tl.to(actions, { opacity: 1, y: 0, duration: 0.7 }, 1.05);
-      tl.to(meta, { opacity: 1, y: 0, duration: 0.6 }, 1.2);
-
-      const mm = gsap.matchMedia();
-      mm.add("(min-width: 768px)", () => {
-        const shell = portraitRef.current;
-        if (!shell) return;
-        const img = shell.querySelector("img");
-        const t = gsap.to(shell, {
-          yPercent: 7,
-          ease: "none",
-          scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: 0.6 },
-        });
-        const t2 = img
-          ? gsap.fromTo(
-              img,
-              { scale: 1.12 },
-              {
-                scale: 1.24,
-                ease: "none",
-                scrollTrigger: { trigger: root, start: "top top", end: "bottom top", scrub: 0.8 },
-              },
-            )
-          : null;
-        return () => {
-          t.scrollTrigger?.kill();
-          t.kill();
-          t2?.scrollTrigger?.kill();
-          t2?.kill();
-        };
-      });
-
-      return () => {
-        splits.forEach((s) => s.revert());
-        mm.revert();
-      };
     }, root);
 
-    return () => {
-      ctx.revert();
-      ScrollTrigger.getAll()
-        .filter((st) => st.trigger === root)
-        .forEach((st) => st.kill());
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      ref={rootRef}
-      id="top"
-      className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 sm:pt-32"
-      style={{ background: "var(--gradient-hero)" }}
-    >
-      <div ref={portraitRef} className="hero-portrait pointer-events-none absolute inset-0 z-0">
-        <img
-          src={imageUrls.heroDesk}
-          alt="Gurpreet Singh Bahara at his desk, Founder & CEO of Kefaru Technologies"
-          fetchPriority="high"
-          className="hero-portrait-image h-full w-full object-cover object-[70%_center] opacity-[0.55] [filter:contrast(1.05)_saturate(0.85)] sm:opacity-70 lg:object-[75%_center]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--navy-deep)] via-[color:var(--navy-deep)]/85 to-[color:var(--navy-deep)]/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)] via-transparent to-[color:var(--navy-deep)]/70" />
-      </div>
-      <div className="pointer-events-none absolute -left-48 top-24 h-[520px] w-[520px] rounded-full bg-[color:var(--gold)]/10 blur-3xl animate-ambient" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-[560px] w-[560px] rounded-full bg-[color:var(--gold-deep)]/12 blur-3xl animate-ambient-2" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-          backgroundSize: "52px 52px",
-        }}
-      />
-      <ParticleField className="z-[1]" />
-
-      <div className="relative z-[3] mx-auto grid w-full max-w-[88rem] grid-cols-1 items-center gap-12 px-5 pb-24 pt-6 sm:px-8 sm:pb-28 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
-        <div className="max-w-3xl">
-          <div className="hero-kicker flex items-center gap-3">
-            <span className="h-px w-10 rule-gold" />
-            <span className="eyebrow text-[color:var(--gold-soft)]">
-              Building Businesses · Connecting Markets · Creating Impact
-            </span>
+    <section ref={rootRef} id="top" className="pdf-hero">
+      <div className="pdf-hero-inner">
+        <div className="pdf-hero-copy">
+          <div className="hero-kicker pdf-kicker">
+            Building Business&nbsp;&nbsp; Connecting Markets&nbsp;&nbsp; Creating Impact
           </div>
 
-          <div className="hero-role mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 sm:gap-x-8">
-            {ROLES.map((r) => (
-              <span key={r} className="hero-role-item eyebrow text-white/70">
-                {r}
-              </span>
-            ))}
-          </div>
+          <h1 className="hero-title pdf-hero-title">Gurpreet Bahara</h1>
 
-          <h1
-            className="hero-title mt-5 font-display text-[clamp(3.4rem,15vw,10rem)] font-normal leading-[0.92] tracking-[-0.02em] text-white"
-            aria-label="Gurpreet Singh Bahara"
-          >
-            <span className="hero-name-line" aria-hidden="true">
-              <span className="hero-name-word">Gurpreet</span>
-            </span>
-            <span className="hero-name-line" aria-hidden="true">
-              <span className="hero-name-word italic text-[color:var(--gold-soft)]">Singh</span>
-            </span>
-          </h1>
-
-          <p className="hero-copy mt-8 max-w-xl text-base leading-relaxed text-white/72 sm:text-lg">
+          <p className="hero-copy pdf-hero-lead">
             18+ years of senior leadership across global digital transformation. Certified
             consultant in Salesforce &amp; AWS.
           </p>
-          <p className="hero-copy hero-copy-delay mt-4 max-w-xl text-sm leading-relaxed text-white/55 sm:text-base">
-            Gurpreet Singh Bahara — Founder &amp; CEO of Kefaru Technologies and Chairman of Sardar
-            Swaran Singh's Anandvan — helping organizations establish, expand, and scale across
+
+          <p className="hero-copy pdf-hero-body">
+            Gurpreet Singh Bahara - Founder &amp; CEO of Kefaru Technologies and Chairman of Sardar
+            Swaran Singh's Anandvan - helping organizations establish, expand, and scale across
             India, the United States, Canada, and emerging global markets.
           </p>
 
-          <div className="hero-actions mt-10 flex flex-wrap items-center gap-4">
-            <a
-              href="#contact"
-              className="btn-primary group inline-flex items-center gap-2.5 px-7 py-3.5 text-xs"
-            >
+          <div className="hero-actions pdf-action-row">
+            <a href="#contact" className="pdf-btn-dark">
               Get in Touch
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
-            <a
-              href="https://kefaru.com/"
-              target="_blank"
-              rel="noreferrer"
-              className="btn-ghost inline-flex items-center gap-2.5 px-7 py-3.5 text-xs"
-            >
+            <a href="https://kefaru.com/" target="_blank" rel="noreferrer" className="pdf-btn-light">
               Visit Kefaru
-              <ExternalLink className="h-4 w-4" />
             </a>
           </div>
 
-          <div className="hero-meta mt-12 flex flex-wrap items-center gap-x-6 gap-y-2 text-[0.65rem] uppercase tracking-[0.28em] text-white/40">
-            <span>Pune · India</span>
-            <span className="hidden h-px w-8 bg-white/20 sm:block" />
-            <span>USA · Canada · Europe · Asia</span>
+          <div className="hero-role pdf-role-row">
+            {ROLES.map((r) => (
+              <span key={r}>{r}</span>
+            ))}
           </div>
         </div>
 
-        <div className="pointer-events-none hidden lg:block" aria-hidden="true" />
-      </div>
-
-      <div className="pointer-events-none absolute bottom-7 left-1/2 z-[3] -translate-x-1/2 text-white/35">
-        <div className="h-10 w-6 rounded-full border border-white/20 p-1">
-          <div className="mx-auto h-2 w-1 animate-bounce rounded-full bg-white/60" />
+        <div className="hero-portrait pdf-hero-portrait">
+          <img
+            src={imageUrls.heroPortrait}
+            alt="Gurpreet Singh Bahara"
+            fetchPriority="high"
+            className="pdf-hero-image"
+          />
         </div>
       </div>
     </section>
@@ -448,7 +326,17 @@ function Heading({
 }
 
 /* ---------- Story / Philosophy ---------- */
-function Metric({ value, suffix = "", label, sub }: { value: number; suffix?: string; label: string; sub: string }) {
+function Metric({
+  value,
+  suffix = "",
+  label,
+  sub,
+}: {
+  value: number;
+  suffix?: string;
+  label: string;
+  sub: string;
+}) {
   const ref = useRef<HTMLDivElement | null>(null);
   const v = useCountUpOnScroll(ref, value);
   return (
@@ -464,97 +352,244 @@ function Metric({ value, suffix = "", label, sub }: { value: number; suffix?: st
 }
 
 function Story() {
+  const philosophyPillars = [
+    {
+      icon: Building2,
+      label: "Enterprise Builder",
+      text: "Scaling consulting, cloud, AI, and GCC-led transformation with execution discipline.",
+    },
+    {
+      icon: Globe2,
+      label: "Market Connector",
+      text: "Creating cross-border opportunities across India, North America, the Middle East, and Africa.",
+    },
+    {
+      icon: Sparkles,
+      label: "Impact Leader",
+      text: "Building values-led systems for businesses and grassroots community transformation.",
+    },
+  ];
+
   return (
-    <Section id="story">
+    <Section
+      id="story"
+      className="philosophy-section bg-[color:var(--ivory)] py-12 sm:py-14 lg:min-h-[100svh] lg:py-12"
+    >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color:var(--gold-deep)]/30 to-transparent" />
+      <div className="philosophy-orb pointer-events-none absolute -left-40 top-28 h-[420px] w-[420px] rounded-full bg-[color:var(--gold)]/10 blur-3xl" />
+      <div className="philosophy-orb philosophy-orb-alt pointer-events-none absolute -right-44 bottom-20 h-[460px] w-[460px] rounded-full bg-[color:var(--navy)]/8 blur-3xl" />
+
       <Reveal>
         <Eyebrow>Philosophy</Eyebrow>
       </Reveal>
 
-      <div className="mt-12 grid grid-cols-1 gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+      <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:items-center lg:gap-14">
         <Reveal>
-          <figure className="relative">
-            <div className="absolute -left-4 -top-4 hidden h-40 w-40 border border-[color:var(--gold)]/40 sm:block" />
-            <img
-              src={imageUrls.philosophyPortrait}
-              alt="Gurpreet Singh Bahara, technology entrepreneur and Chairman of Sardar Swaran Singh's Anandvan"
-              loading="lazy"
-              className="relative aspect-[4/5] w-full object-cover object-top shadow-[var(--shadow-editorial)]"
-            />
+          <figure className="philosophy-visual group relative">
+            <div className="philosophy-frame pointer-events-none absolute -inset-4 border border-[color:var(--gold-deep)]/25" />
+            <div className="philosophy-portrait-frame relative overflow-hidden bg-[color:var(--navy-deep)] shadow-[var(--shadow-editorial)]">
+              <img
+                src={imageUrls.gsPhilosophy}
+                alt="Gurpreet Singh Bahara, technology entrepreneur and Chairman of Sardar Swaran Singh's Anandvan"
+                loading="lazy"
+                className="philosophy-portrait aspect-[4/5] max-h-[34rem] w-full object-cover object-[50%_18%] transition-transform duration-1000 ease-out group-hover:scale-[1.045] lg:aspect-[1/1] lg:max-h-[calc(100svh-10rem)]"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)]/42 via-transparent to-transparent" />
+              <div className="philosophy-sheen pointer-events-none absolute inset-0" />
+            </div>
+
+            <div className="philosophy-floating philosophy-floating-top">
+              <span className="eyebrow text-[0.55rem] text-white/55">Founder</span>
+              <strong>Kefaru Technologies</strong>
+            </div>
+            <div className="philosophy-floating philosophy-floating-bottom">
+              <span className="eyebrow text-[0.55rem] text-white/55">Chairman</span>
+              <strong>SSS Anandvan</strong>
+            </div>
           </figure>
         </Reveal>
 
-        <Reveal delay={120}>
-          <div>
-            <Heading className="max-w-2xl">
+        <div>
+          <Reveal delay={120}>
+            <Heading className="max-w-2xl !text-[clamp(2.05rem,4.2vw,4.4rem)] !leading-[1.02]">
               A global entrepreneur building technology, partnerships, and lasting impact.
             </Heading>
-            <div className="mt-8 space-y-5 text-[0.95rem] leading-[1.85] text-[color:var(--ink-soft)] sm:text-base">
+          </Reveal>
+
+          <div className="mt-6 grid grid-cols-1 gap-3">
+            {philosophyPillars.map(({ icon: Icon, label, text }) => (
+              <div
+                key={label}
+                data-fx-item
+                className="philosophy-pillar group relative overflow-hidden border border-[color:var(--ink)]/10 bg-white/45 p-4 shadow-[var(--shadow-card)] transition-all duration-700 hover:-translate-y-1 hover:border-[color:var(--gold-deep)]/35 hover:bg-white/70"
+              >
+                <div className="flex gap-4">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center border border-[color:var(--gold-deep)]/25 bg-[color:var(--gold)]/10 text-[color:var(--gold-deep)] transition-all duration-500 group-hover:bg-[color:var(--gold)]/20">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <div className="eyebrow text-[color:var(--gold-deep)]">{label}</div>
+                    <p className="mt-2 text-sm leading-relaxed text-[color:var(--ink-soft)]">
+                      {text}
+                    </p>
+                  </div>
+                </div>
+                <span className="pointer-events-none absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-[color:var(--gold-deep)]/45 transition-transform duration-700 group-hover:scale-x-100" />
+              </div>
+            ))}
+          </div>
+
+          <Reveal delay={180}>
+            <div className="mt-6 grid gap-4 text-[0.9rem] leading-[1.65] text-[color:var(--ink-soft)] sm:text-[0.95rem] lg:grid-cols-2">
               <p>
-                Gurpreet Bahara is a technology entrepreneur, business strategist, and philanthropist
-                with a passion for building businesses that create lasting impact. As Founder &amp;
-                CEO of Kefaru Technologies, he partners with organizations across India, North
-                America, the Middle East, and Africa to accelerate growth, drive digital
-                transformation, and establish Global Capability Centers.
+                Gurpreet Bahara is a technology entrepreneur, business strategist, and
+                philanthropist with a passion for building businesses that create lasting impact. As
+                Founder &amp; CEO of Kefaru Technologies, he partners with organizations across
+                India, North America, the Middle East, and Africa to accelerate growth, drive
+                digital transformation, and establish Global Capability Centers.
               </p>
               <p>
                 His work spans enterprise consulting, cloud technologies, artificial intelligence,
                 and business innovation, helping companies scale with confidence in an evolving
-                global marketplace. With more than two decades of experience, he has helped
-                enterprises, founders, and leadership teams build high-growth businesses, forge
-                strategic partnerships, and unlock cross-border opportunities.
-              </p>
-              <p>
-                He believes in leading with values, nurturing collaborative teams, and building
-                scalable systems — whether in corporate setups or while creating frameworks for
-                grassroots change. Beyond business, Gurpreet serves as Chairman of Sardar Swaran
-                Singh's Anandvan, leading initiatives across education, skill development, rural
-                development, women empowerment, and technology-driven community transformation.
+                global marketplace. Beyond business, he serves as Chairman of Sardar Swaran Singh's
+                Anandvan, leading education, skill development, rural development, women
+                empowerment, and technology-driven community transformation.
               </p>
             </div>
 
             <a
               href="#journey"
-              className="eyebrow group mt-9 inline-flex items-center gap-3 text-[color:var(--gold-deep)]"
+              className="philosophy-cta eyebrow group mt-6 inline-flex items-center gap-4 text-[color:var(--gold-deep)]"
             >
               Read the full story
-              <span className="h-px w-10 bg-[color:var(--gold-deep)] transition-all duration-300 group-hover:w-16" />
+              <span className="grid h-9 w-14 place-items-center border border-[color:var(--gold-deep)]/35 transition-all duration-500 group-hover:w-20 group-hover:bg-[color:var(--gold)]/15">
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
             </a>
+          </Reveal>
 
-            <div className="mt-12 grid grid-cols-1 gap-8 border-t border-[color:var(--ink)]/10 pt-10 min-[420px]:grid-cols-3">
-              <Metric value={18} suffix="+" label="Years" sub="Of senior leadership" />
-              <Metric value={3} label="Continents" sub="Global experience" />
-              <Metric value={100} suffix="+" label="Projects" sub="Delivered successfully" />
-            </div>
+          <div className="mt-8 grid grid-cols-1 gap-4 min-[420px]:grid-cols-3">
+            {[
+              ["18+", "Years", "Of senior leadership"],
+              ["3", "Continents", "Global experience"],
+              ["100+", "Projects", "Delivered successfully"],
+            ].map(([value, label, sub]) => (
+              <div
+                key={label}
+                data-fx-item
+                className="philosophy-stat border-t border-[color:var(--ink)]/10 pt-5"
+              >
+                <div className="font-display text-4xl font-medium leading-none text-[color:var(--ink)] sm:text-5xl">
+                  {value}
+                </div>
+                <div className="eyebrow mt-3 text-[color:var(--ink)]">{label}</div>
+                <div className="mt-1 text-xs leading-relaxed text-[color:var(--ink-muted)]">
+                  {sub}
+                </div>
+              </div>
+            ))}
           </div>
-        </Reveal>
+        </div>
       </div>
     </Section>
   );
 }
 
 /* ---------- Quote ---------- */
+/* ---------- Quote ---------- */
 function QuoteBlock() {
+  const quotePrinciples = ["Values-led", "Scalable systems", "Grassroots impact"];
+  const quoteRef = useRef<HTMLElement | null>(null);
+
+  useLayoutEffect(() => {
+    const section = quoteRef.current;
+    if (!section) return;
+
+    if (prefersReducedMotion()) {
+      section.classList.add("is-writing");
+      return;
+    }
+
+    const { ScrollTrigger } = ensureGsap();
+    const trigger = ScrollTrigger.create({
+      trigger: section,
+      start: "top 70%",
+      once: true,
+      onEnter: () => section.classList.add("is-writing"),
+    });
+
+    return () => trigger.kill();
+  }, []);
+
   return (
-    <section className="relative isolate overflow-hidden">
+    <section
+      ref={quoteRef}
+      className="quote-section relative isolate overflow-hidden bg-[color:var(--navy-deep)]"
+    >
       <img
-        src={imageUrls.smbGrowth}
+        src={imageUrls.quoteBackground}
         alt=""
         aria-hidden="true"
         loading="lazy"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="quote-bg absolute inset-0 h-full w-full object-cover"
       />
-      <div className="absolute inset-0 bg-[color:var(--navy-deep)]/88" />
-      <div className="relative mx-auto max-w-[88rem] px-5 py-24 sm:px-8 sm:py-32">
+      <div className="absolute inset-0 bg-[color:var(--navy-deep)]/82" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--navy-deep)] via-[color:var(--navy-deep)]/72 to-[color:var(--navy-deep)]/35" />
+      <div className="quote-grid pointer-events-none absolute inset-0" />
+      <div className="quote-orb fx-ambient pointer-events-none absolute -left-40 top-10 h-[420px] w-[420px] rounded-full bg-[color:var(--gold)]/12 blur-3xl" />
+
+      <div className="relative mx-auto grid max-w-[88rem] grid-cols-1 gap-8 px-5 py-16 sm:px-8 sm:py-20 lg:min-h-[100svh] lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:py-12">
         <Reveal>
-          <blockquote className="max-w-3xl">
-            <Quote className="h-8 w-8 text-[color:var(--gold)]/60" />
-            <p className="mt-7 font-display text-[clamp(1.6rem,4.2vw,2.9rem)] font-normal italic leading-[1.3] text-white">
-              "I believe in leading with values, nurturing collaborative teams, and building scalable
-              systems — in corporate setups and in frameworks for grassroots change."
+          <div className="quote-panel relative overflow-hidden border border-white/10 bg-white/[0.045] p-5 shadow-[0_34px_90px_-42px_rgba(0,0,0,0.9)] backdrop-blur-md sm:p-6">
+            <div className="quote-panel-sheen pointer-events-none absolute inset-0" />
+            <div className="relative">
+              <div className="eyebrow text-[color:var(--gold-soft)]">Conviction</div>
+              <div className="mt-6 grid gap-3">
+                {quotePrinciples.map((item) => (
+                  <div
+                    key={item}
+                    data-fx-item
+                    className="quote-principle group flex items-center justify-between border-b border-white/10 pb-3 text-white/72 last:border-b-0 last:pb-0"
+                  >
+                    <span className="font-display text-xl font-normal text-white sm:text-2xl">
+                      {item}
+                    </span>
+                    <span className="h-px w-12 bg-[color:var(--gold-soft)]/45 transition-all duration-500 group-hover:w-20" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={120}>
+          <blockquote className="quote-statement relative max-w-4xl">
+            <div className="quote-mark-wrap mb-6 grid h-14 w-14 place-items-center border border-[color:var(--gold-soft)]/35 bg-[color:var(--gold)]/10 text-[color:var(--gold-soft)]">
+              <Quote className="h-8 w-8" />
+            </div>
+
+            <p className="quote-line font-display text-[clamp(1.85rem,3.65vw,3.65rem)] font-normal italic leading-[1.14] text-white">
+              <span className="quote-write-line">
+                <span className="quote-write-text">"I believe in leading with values,</span>
+              </span>
+              <span className="quote-write-line">
+                <span className="quote-write-text">nurturing collaborative teams,</span>
+              </span>
+              <span className="quote-write-line">
+                <span className="quote-write-text">and building scalable systems —</span>
+              </span>
+              <span className="quote-write-line">
+                <span className="quote-write-text">in corporate setups and in frameworks</span>
+              </span>
+              <span className="quote-write-line">
+                <span className="quote-write-text">for grassroots change."</span>
+              </span>
             </p>
-            <footer className="mt-8 flex items-center gap-3">
-              <span className="h-px w-10 rule-gold" />
+            <footer className="mt-7 flex flex-wrap items-center gap-4">
+              <span className="h-px w-14 rule-gold" />
               <span className="eyebrow text-[color:var(--gold-soft)]">Gurpreet Singh</span>
+              <span className="hidden h-px w-8 bg-white/15 sm:block" />
+              <span className="eyebrow text-white/35">Founder · Chairman · Builder</span>
             </footer>
           </blockquote>
         </Reveal>
@@ -567,87 +602,107 @@ function QuoteBlock() {
 const ventures = [
   {
     name: "Kefaru Technologies",
+    eyebrow: "Enterprise Venture",
     tags: ["Technology Consulting", "Salesforce", "Cloud"],
     body: "Boutique enterprise IT consultancy bridging business vision with scalable cloud execution — Salesforce, AWS, AI, and Global Capability Centers across India and North America.",
-    image: imageUrls.smbGrowth,
+    image: imageUrls.kefaruTech,
     href: "https://kefaru.com/",
     cta: "Visit Website",
+    signature: "Global Vision · Smart Engineering · Fearless Execution",
+    metrics: ["AWS", "Salesforce", "AI", "GCC"],
   },
   {
     name: "SSS Anandvan",
+    eyebrow: "Impact Venture",
     tags: ["Social Impact", "Empowerment", "NGO"],
     body: "A movement to blend tradition with technology, values with opportunities, education with empowerment — free schooling and career guidance for underprivileged children.",
-    image: imageUrls.ngoSession,
-    href: "https://www.youtube.com/@sssanandvan2155",
-    cta: "See the Work",
+    image: imageUrls.anandvan,
+    href: "https://www.sssanandvan.com/",
+    cta: "Visit Website",
+    signature: "Education · Skill Development · Community Upliftment",
+    metrics: ["Education", "Skills", "Rural Impact", "Women Empowerment"],
   },
 ];
 
 function Ventures() {
   return (
-    <Section id="ventures" className="bg-[color:var(--ivory-deep)]">
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_1fr] lg:items-end">
+    <Section id="ventures" className="venture-section bg-[color:var(--ivory-deep)] py-16 sm:py-20">
+      <div className="venture-ambient pointer-events-none absolute -right-40 top-20 h-[420px] w-[420px] rounded-full bg-[color:var(--gold)]/10 blur-3xl" />
+
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
         <Reveal>
-          <Heading className="max-w-lg">
-            The Work Beyond
-            <br />
-            the Title
-          </Heading>
+          <div>
+            <Eyebrow>Ventures</Eyebrow>
+            <Heading className="mt-6 max-w-xl !text-[clamp(2.2rem,4.6vw,4.8rem)]">
+              The Work Beyond
+              <br />
+              the Title
+            </Heading>
+          </div>
         </Reveal>
         <Reveal delay={100}>
-          <p className="max-w-xl text-[0.95rem] leading-[1.85] text-[color:var(--ink-soft)] lg:pb-3">
+          <p className="max-w-xl text-[0.95rem] leading-[1.75] text-[color:var(--ink-soft)] lg:pb-2">
             Two ventures. One rooted in enterprise technology. One devoted to human impact. Both
             shaped by the same conviction: that depth beats scale.
           </p>
         </Reveal>
       </div>
 
-      <div className="mt-16 grid grid-cols-1 gap-14 lg:gap-20">
+      <div className="mt-10 grid grid-cols-1 gap-7 lg:grid-cols-2">
         {ventures.map((v, i) => (
-          <Reveal key={v.name} delay={i * 120}>
-            <article
-              className={`grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-16 ${
-                i % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
-              }`}
-            >
-              <div className="group relative overflow-hidden">
-                <img
-                  src={v.image}
-                  alt={v.name}
-                  loading="lazy"
-                  className="aspect-[16/10] w-full object-cover shadow-[var(--shadow-card)] transition-transform duration-700 group-hover:scale-[1.04]"
-                />
+          <article key={v.name} data-fx-item className="venture-card group">
+            <div className="venture-media">
+              <img src={v.image} alt={v.name} loading="lazy" className="venture-image" />
+              <div className="venture-media-overlay" />
+              <div className="venture-index">0{i + 1}</div>
+            </div>
+
+            <div className="venture-content">
+              <div className="venture-topline">
+                <span className="venture-kicker">{v.eyebrow}</span>
+                <span className="venture-line" />
               </div>
-              <div>
-                <h3 className="font-display text-[clamp(1.7rem,3.4vw,2.5rem)] font-normal leading-tight text-[color:var(--ink)]">
-                  {v.name}
-                </h3>
-                <div className="eyebrow mt-4 flex flex-wrap gap-x-4 gap-y-2 text-[color:var(--gold-deep)]">
-                  {v.tags.map((t) => (
-                    <span key={t}>{t}</span>
-                  ))}
-                </div>
-                <p className="mt-5 max-w-lg text-[0.95rem] leading-[1.85] text-[color:var(--ink-soft)]">
-                  {v.body}
-                </p>
-                <a
-                  href={v.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="eyebrow group mt-7 inline-flex items-center gap-3 text-[color:var(--ink)] transition-colors hover:text-[color:var(--gold-deep)]"
-                >
-                  {v.cta}
-                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-                </a>
+
+              <h3 className="venture-title">{v.name}</h3>
+
+              <p className="venture-signature">{v.signature}</p>
+
+              <div className="venture-tag-row">
+                {v.tags.map((t) => (
+                  <span key={t} className="venture-tag">
+                    {t}
+                  </span>
+                ))}
               </div>
-            </article>
-          </Reveal>
+
+              <p className="venture-body">{v.body}</p>
+
+              <div className="venture-metric-rail">
+                {v.metrics.map((item) => (
+                  <span key={item} className="venture-chip">
+                    {item}
+                  </span>
+                ))}
+              </div>
+
+              <a
+                href={v.href}
+                target="_blank"
+                rel="noreferrer"
+                className="venture-link eyebrow group/link"
+              >
+                {v.cta}
+                <span className="venture-link-icon">
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
+                </span>
+              </a>
+            </div>
+          </article>
         ))}
       </div>
     </Section>
   );
 }
-
 /* ---------- Journey ---------- */
 const journey = [
   {
@@ -691,47 +746,76 @@ const journey = [
 
 function Journey() {
   return (
-    <Section id="journey" tone="dark">
+    <Section id="journey" tone="dark" className="journey-section py-16 sm:py-20">
+      <div className="journey-ambient journey-ambient-left pointer-events-none absolute rounded-full" />
+      <div className="journey-ambient journey-ambient-right pointer-events-none absolute rounded-full" />
+
       <Reveal>
         <Eyebrow tone="dark">The Journey</Eyebrow>
       </Reveal>
+
       <Reveal delay={80}>
-        <Heading tone="dark" className="mt-6 max-w-2xl">
+        <Heading
+          tone="dark"
+          className="mt-6 max-w-4xl font-sans !text-[clamp(3.1rem,6.4vw,6rem)] !font-semibold !leading-[0.96] !tracking-normal"
+        >
           Building consulting organizations from scratch.
         </Heading>
       </Reveal>
 
-      <ul className="mt-16 border-t border-white/10">
+      <Reveal delay={130}>
+        <p className="mt-6 max-w-3xl text-base leading-relaxed text-white/58 sm:text-lg">
+          Hiring teams, creating delivery practices and implementation methodology, partner
+          enablement, and global consulting operations — not just individual implementations.
+        </p>
+      </Reveal>
+
+      <div className="journey-map mt-14 lg:mt-20">
         {journey.map((step, i) => {
           const Icon = step.icon;
+          const sideClass = i % 2 === 0 ? "journey-node-left" : "journey-node-right";
+
           return (
-            <Reveal as="li" key={step.year + i} delay={i * 70} y={26}>
-              <div className="group grid grid-cols-1 gap-4 border-b border-white/10 py-8 transition-colors duration-500 hover:bg-white/[0.025] sm:grid-cols-[8rem_1fr] sm:gap-10 sm:py-10 lg:grid-cols-[12rem_1fr]">
-                <div className="flex items-center gap-3">
-                  <span className="font-display text-3xl font-normal text-[color:var(--gold-soft)] sm:text-4xl">
-                    {step.year}
-                  </span>
-                </div>
-                <div className="min-w-0">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <Icon className="h-4 w-4 shrink-0 text-[color:var(--gold)]" />
-                    <h3 className="font-display text-xl font-normal text-white sm:text-2xl">
+            <Reveal
+              as="article"
+              key={step.year + i}
+              delay={i * 80}
+              y={34}
+              className={`journey-node ${sideClass}`}
+            >
+              <span className="journey-dot" aria-hidden="true" />
+
+              <div data-fx-item className="journey-card group relative overflow-hidden">
+                <div className="journey-card-glow pointer-events-none absolute inset-0" />
+
+                <div className="relative z-[1] flex items-start justify-between gap-5">
+                  <div>
+                    <div className="journey-chapter">Chapter {String(i + 1).padStart(2, "0")}</div>
+                    <h3 className="mt-3 font-sans text-2xl font-semibold leading-tight text-white sm:text-3xl">
                       {step.role}
                     </h3>
-                    {step.current && (
-                      <span className="eyebrow inline-flex items-center gap-1.5 border border-[color:var(--gold)]/40 px-2.5 py-1 text-[0.6rem] text-[color:var(--gold-soft)]">
-                        <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--gold)] animate-pulse-dot" />
-                        Now
-                      </span>
-                    )}
                   </div>
-                  <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/60">{step.body}</p>
+
+                  <span className="journey-icon">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                </div>
+
+                <div className="journey-line my-6" />
+
+                <p className="relative z-[1] text-sm leading-relaxed text-white/62 sm:text-base">
+                  {step.body}
+                </p>
+
+                <div className="relative z-[1] mt-7 flex flex-wrap items-center justify-between gap-4">
+                  <span className="journey-year">{step.year}</span>
+                  {step.current && <span className="journey-status">Now</span>}
                 </div>
               </div>
             </Reveal>
           );
         })}
-      </ul>
+      </div>
     </Section>
   );
 }
@@ -741,7 +825,10 @@ function Stat({ n, label, suffix = "" }: { n: number; label: string; suffix?: st
   const ref = useRef<HTMLDivElement | null>(null);
   const v = useCountUpOnScroll(ref, n);
   return (
-    <div ref={ref} className="card-ivory p-7 transition-transform duration-500 hover:-translate-y-1">
+    <div
+      ref={ref}
+      className="card-ivory p-7 transition-transform duration-500 hover:-translate-y-1"
+    >
       <div className="font-display text-4xl font-medium leading-none text-[color:var(--ink)] sm:text-5xl">
         {v}
         {suffix}
@@ -851,86 +938,306 @@ const skills = [
 ];
 
 function Expertise() {
-  return (
-    <Section id="expertise" tone="dark">
-      <Reveal>
-        <Eyebrow tone="dark">Expertise &amp; Certifications</Eyebrow>
-      </Reveal>
-      <Reveal delay={80}>
-        <Heading tone="dark" className="mt-6 max-w-3xl">
-          Credentialed across Salesforce, AWS, SAP, and analytics platforms.
-        </Heading>
-      </Reveal>
+  const credentialGroups = [
+    {
+      label: "Salesforce Depth",
+      sub: "Marketing Cloud, Personalization, Heroku, Datorama",
+      icon: BadgeCheck,
+      count: "05",
+      items: [
+        certifications[0],
+        certifications[1],
+        certifications[2],
+        certifications[3],
+        certifications[7],
+      ],
+    },
+    {
+      label: "Cloud & Enterprise Systems",
+      sub: "AWS, SAP, enterprise platforms, operating discipline",
+      icon: Globe2,
+      count: "03",
+      items: [certifications[4], certifications[5], certifications[6]],
+    },
+  ];
 
-      <div className="mt-14 grid grid-cols-1 gap-px overflow-hidden border border-white/10 bg-white/10 sm:grid-cols-2">
-        {certifications.map((c, i) => (
-          <Reveal key={c} delay={i * 50} y={18}>
-            <div className="group flex h-full items-start gap-4 bg-[color:var(--navy-deep)] p-6 transition-colors duration-500 hover:bg-[color:var(--navy)] sm:p-7">
-              <BadgeCheck className="mt-0.5 h-5 w-5 shrink-0 text-[color:var(--gold)] transition-transform duration-500 group-hover:scale-110" />
-              <div className="min-w-0">
-                <div className="text-sm font-medium leading-snug text-white">{c}</div>
-                <div className="eyebrow mt-2 text-[0.6rem] text-white/35">Certified</div>
-              </div>
-            </div>
+  const capabilityPillars = [
+    {
+      icon: Building2,
+      label: "Consulting Systems",
+      items: ["IT Consulting", "Management Consulting", "Business Strategy"],
+    },
+    {
+      icon: Rocket,
+      label: "Growth Execution",
+      items: ["Strategic Partnerships", "Growth Marketing", "SaaS Development"],
+    },
+    {
+      icon: Sparkles,
+      label: "Modern Platforms",
+      items: ["AWS & Cloud", "Artificial Intelligence", "Business Analytics"],
+    },
+  ];
+
+  return (
+    <Section id="expertise" tone="dark" className="expertise-section py-16 sm:py-20">
+      <div className="expertise-ambient expertise-ambient-left pointer-events-none absolute rounded-full" />
+      <div className="expertise-ambient expertise-ambient-right pointer-events-none absolute rounded-full" />
+
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-end">
+        <div>
+          <Reveal>
+            <Eyebrow tone="dark">Expertise &amp; Certifications</Eyebrow>
           </Reveal>
-        ))}
+          <Reveal delay={80}>
+            <Heading tone="dark" className="mt-6 max-w-3xl">
+              Credentialed across Salesforce, AWS, SAP, and analytics platforms.
+            </Heading>
+          </Reveal>
+        </div>
+
+        <Reveal delay={140}>
+          <div className="expertise-summary">
+            <div className="eyebrow text-[color:var(--gold-soft)]">Credential Architecture</div>
+            <p className="mt-4 text-sm leading-relaxed text-white/58 sm:text-base">
+              A practical mix of cloud certification, Salesforce specialization, enterprise systems,
+              and consulting execution built for transformation work.
+            </p>
+          </div>
+        </Reveal>
       </div>
 
-      <Reveal delay={120}>
-        <div className="mt-14">
-          <div className="eyebrow mb-5 text-white/45">Core Capabilities</div>
-          <div className="flex flex-wrap gap-2.5">
-            {skills.map((s) => (
-              <span
-                key={s}
-                className="inline-flex items-center border border-white/12 px-4 py-2 text-xs font-medium text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:border-[color:var(--gold)]/60 hover:text-[color:var(--gold-soft)]"
-              >
-                {s}
-              </span>
-            ))}
-          </div>
+      <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:gap-8">
+        <div className="grid grid-cols-1 gap-5">
+          {credentialGroups.map((group, groupIndex) => {
+            const Icon = group.icon;
+
+            return (
+              <Reveal key={group.label} delay={groupIndex * 100} y={24}>
+                <article
+                  data-fx-item
+                  className="expertise-credential-card group relative overflow-hidden"
+                >
+                  <div className="expertise-card-glow pointer-events-none absolute inset-0" />
+
+                  <div className="relative z-[1] flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="flex gap-4">
+                      <span className="expertise-icon">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <div>
+                        <div className="eyebrow text-[color:var(--gold-soft)]">{group.label}</div>
+                        <h3 className="mt-3 font-display text-2xl font-normal leading-tight text-white sm:text-3xl">
+                          {group.sub}
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="expertise-count">
+                      <span>{group.count}</span>
+                      <small>Verified</small>
+                    </div>
+                  </div>
+
+                  <div className="relative z-[1] mt-7 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {group.items.map((item, itemIndex) => (
+                      <div key={item} className="expertise-cert-row">
+                        <span className="expertise-cert-index">
+                          {String(itemIndex + 1).padStart(2, "0")}
+                        </span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
-      </Reveal>
+
+        <Reveal delay={180}>
+          <aside data-fx-item className="expertise-capability-panel relative overflow-hidden">
+            <div className="eyebrow text-[color:var(--gold-soft)]">Core Capabilities</div>
+
+            <div className="mt-7 space-y-5">
+              {capabilityPillars.map(({ icon: Icon, label, items }) => (
+                <div key={label} className="expertise-pillar group">
+                  <div className="flex items-center gap-3">
+                    <span className="expertise-pillar-icon">
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <h3 className="font-sans text-base font-semibold text-white">{label}</h3>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {items.map((item) => (
+                      <span key={item} className="expertise-chip">
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-7 border-t border-white/10 pt-6">
+              <div className="eyebrow text-white/35">Additional Strengths</div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {skills
+                  .filter(
+                    (skill) => !capabilityPillars.some((pillar) => pillar.items.includes(skill)),
+                  )
+                  .map((skill) => (
+                    <span key={skill} className="expertise-chip expertise-chip-muted">
+                      {skill}
+                    </span>
+                  ))}
+              </div>
+            </div>
+          </aside>
+        </Reveal>
+      </div>
     </Section>
   );
 }
-
 /* ---------- Leadership ---------- */
 const traits = [
-  { t: "Calm under pressure", d: "Steady leadership through complex, high-stakes transformations." },
-  { t: "Strategic & technically deep", d: "Balances architectural depth with clear business framing." },
+  {
+    t: "Calm under pressure",
+    d: "Steady leadership through complex, high-stakes transformations.",
+  },
+  {
+    t: "Strategic & technically deep",
+    d: "Balances architectural depth with clear business framing.",
+  },
   { t: "Responsive & delivery-focused", d: "Prioritizes outcomes and clean execution over noise." },
-  { t: "An excellent communicator", d: "Manages enterprise conversations across cultures and time zones." },
+  {
+    t: "An excellent communicator",
+    d: "Manages enterprise conversations across cultures and time zones.",
+  },
 ];
 
 function Leadership() {
-  return (
-    <Section id="leadership">
-      <Reveal>
-        <Eyebrow>Leadership</Eyebrow>
-      </Reveal>
-      <Reveal delay={80}>
-        <Heading className="mt-6 max-w-3xl">
-          How colleagues, partners, and clients describe working together.
-        </Heading>
-      </Reveal>
+  const leadershipCards = traits.map((trait, i) => {
+    const accents = [
+      {
+        icon: BadgeCheck,
+        signal: "High-stakes calm",
+        proof: "Complex transformations",
+      },
+      {
+        icon: Sparkles,
+        signal: "Technical clarity",
+        proof: "Business-aligned architecture",
+      },
+      {
+        icon: Rocket,
+        signal: "Delivery rhythm",
+        proof: "Outcome-first execution",
+      },
+      {
+        icon: Globe2,
+        signal: "Global communication",
+        proof: "Cross-cultural leadership",
+      },
+    ];
 
-      <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2">
-        {traits.map((tr, i) => (
-          <Reveal key={tr.t} delay={i * 90} y={22}>
-            <div className="card-ivory group relative h-full p-8 transition-transform duration-500 hover:-translate-y-1">
-              <Quote className="absolute right-7 top-7 h-7 w-7 text-[color:var(--gold)]/40" />
-              <h3 className="max-w-[80%] font-display text-2xl font-normal text-[color:var(--ink)]">
-                {tr.t}
-              </h3>
-              <p className="mt-4 text-sm leading-relaxed text-[color:var(--ink-soft)]">{tr.d}</p>
-              <div className="mt-7 h-px w-12 rule-gold" />
-              <div className="eyebrow mt-4 text-[0.6rem] text-[color:var(--ink-muted)]">
-                Paraphrased from professional recommendations
-              </div>
-            </div>
+    return {
+      ...trait,
+      ...accents[i],
+      index: String(i + 1).padStart(2, "0"),
+    };
+  });
+
+  return (
+    <Section id="leadership" className="leadership-section bg-[color:var(--ivory)] py-16 sm:py-20">
+      <div className="leadership-ambient leadership-ambient-left pointer-events-none absolute rounded-full" />
+      <div className="leadership-ambient leadership-ambient-right pointer-events-none absolute rounded-full" />
+
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
+        <div>
+          <Reveal>
+            <Eyebrow>Leadership</Eyebrow>
           </Reveal>
-        ))}
+          <Reveal delay={80}>
+            <Heading className="mt-6 max-w-3xl">
+              How colleagues, partners, and clients describe working together.
+            </Heading>
+          </Reveal>
+        </div>
+
+        <Reveal delay={130}>
+          <div className="leadership-summary">
+            <div className="eyebrow text-[color:var(--gold-deep)]">Working Style</div>
+            <p className="mt-4 text-sm leading-relaxed text-[color:var(--ink-soft)] sm:text-base">
+              A reputation built around steadiness, strategic depth, delivery ownership, and clear
+              communication across complex enterprise conversations.
+            </p>
+          </div>
+        </Reveal>
+      </div>
+
+      <div className="leadership-stage mt-14">
+        <div className="leadership-trust-rail">
+          <span>Colleagues</span>
+          <span>Partners</span>
+          <span>Clients</span>
+          <span>Teams</span>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {leadershipCards.map((card, i) => {
+            const Icon = card.icon;
+
+            return (
+              <Reveal key={card.t} delay={i * 100} y={26}>
+                <article
+                  data-fx-item
+                  className="leadership-card group relative h-full overflow-hidden"
+                >
+                  <div className="leadership-card-glow pointer-events-none absolute inset-0" />
+
+                  <div className="relative z-[1] flex items-start justify-between gap-5">
+                    <div>
+                      <span className="leadership-index">{card.index}</span>
+                      <h3 className="mt-5 font-display text-3xl font-normal leading-tight text-[color:var(--ink)]">
+                        {card.t}
+                      </h3>
+                    </div>
+
+                    <span className="leadership-quote-mark">
+                      <Quote className="h-6 w-6" />
+                    </span>
+                  </div>
+
+                  <p className="relative z-[1] mt-5 text-sm leading-relaxed text-[color:var(--ink-soft)] sm:text-base">
+                    {card.d}
+                  </p>
+
+                  <div className="leadership-divider" />
+
+                  <div className="relative z-[1] flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="leadership-icon">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <div>
+                        <div className="eyebrow text-[0.58rem] text-[color:var(--gold-deep)]">
+                          {card.signal}
+                        </div>
+                        <div className="mt-1 text-xs font-medium text-[color:var(--ink-muted)]">
+                          {card.proof}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="leadership-source">Professional recommendations</div>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
+        </div>
       </div>
     </Section>
   );
@@ -942,79 +1249,139 @@ function Impact() {
     {
       src: imageUrls.sosVillage,
       caption:
-        "SOS Village session — a one-hour visit that ran three hours because of how engaged the students were.",
+        "SOS Village session - a one-hour visit that ran three hours because of how engaged the students were.",
     },
     {
       src: imageUrls.ngoSession,
       caption:
-        "Guiding students onto their higher-education and career paths — resumes, interviews, and self-belief.",
+        "Guiding students onto their higher-education and career paths - resumes, interviews, and self-belief.",
     },
   ];
-  return (
-    <Section id="impact" tone="dark">
-      <div className="pointer-events-none absolute -right-40 top-10 h-[420px] w-[420px] rounded-full bg-[color:var(--gold)]/8 blur-3xl animate-ambient-2" />
-      <Reveal>
-        <Eyebrow tone="dark">Social Impact</Eyebrow>
-      </Reveal>
-      <Reveal delay={80}>
-        <Heading tone="dark" className="mt-6 max-w-3xl">
-          Sardar Swaran Singh's Anandvan — A Dream of a Father.
-        </Heading>
-      </Reveal>
-      <Reveal delay={140}>
-        <p className="mt-6 max-w-2xl text-[0.95rem] leading-[1.85] text-white/60">
-          An NGO founded and chaired in memory of his father, Swaran Singh — providing free
-          education to underprivileged children near Lucknow, Uttar Pradesh.
-        </p>
-      </Reveal>
 
-      <div className="mt-14 grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr]">
-        <Reveal>
-          <div>
-            <div className="grid grid-cols-1 gap-6 border-y border-white/10 py-8 min-[420px]:grid-cols-3">
-              {[
-                ["Jan 2022", "Began"],
-                ["150+", "Students"],
-                ["Nursery–5th", "Standards"],
-              ].map(([n, l]) => (
-                <div key={l} className="min-w-0">
-                  <div className="break-words font-display text-2xl font-normal leading-tight text-[color:var(--gold-soft)]">
-                    {n}
+  const impactMetrics = [
+    { value: "Jan 2022", label: "Began", icon: Rocket },
+    { value: "150+", label: "Students", icon: Users },
+    { value: "Nursery-5th", label: "Standards", icon: GraduationCap },
+  ];
+
+  const impactPillars = [
+    {
+      icon: GraduationCap,
+      title: "Free Education",
+      text: "Access to schooling for financially underprivileged children near Lucknow.",
+    },
+    {
+      icon: Sparkles,
+      title: "Life Skills",
+      text: "Ethics, confidence, communication, and practical development beyond academics.",
+    },
+    {
+      icon: BadgeCheck,
+      title: "Career Pathways",
+      text: "Resume-building, interview preparation, and guidance toward real employment routes.",
+    },
+  ];
+
+  return (
+    <Section id="impact" tone="dark" className="impact-section py-16 sm:py-20">
+      <div className="impact-ambient impact-ambient-left pointer-events-none absolute rounded-full" />
+      <div className="impact-ambient impact-ambient-right pointer-events-none absolute rounded-full" />
+
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div>
+          <Reveal>
+            <Eyebrow tone="dark">Social Impact</Eyebrow>
+          </Reveal>
+          <Reveal delay={80}>
+            <Heading tone="dark" className="mt-6 max-w-4xl">
+              Sardar Swaran Singh's Anandvan - A Dream of a Father.
+            </Heading>
+          </Reveal>
+        </div>
+
+        <Reveal delay={130}>
+          <div data-fx-item className="impact-mission-card relative overflow-hidden">
+            <div className="eyebrow text-[color:var(--gold-soft)]">Mission</div>
+            <p className="mt-4 text-sm leading-relaxed text-white/62 sm:text-base">
+              An NGO founded and chaired in memory of his father, Swaran Singh - providing free
+              education to underprivileged children near Lucknow, Uttar Pradesh.
+            </p>
+          </div>
+        </Reveal>
+      </div>
+
+      <div className="mt-14 grid grid-cols-1 gap-8 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 gap-4 min-[520px]:grid-cols-3">
+            {impactMetrics.map(({ value, label, icon: Icon }, i) => (
+              <Reveal key={label} delay={i * 80} y={20}>
+                <div data-fx-item className="impact-metric group relative overflow-hidden">
+                  <div className="impact-metric-glow pointer-events-none absolute inset-0" />
+                  <Icon className="relative z-[1] h-5 w-5 text-[color:var(--gold)]" />
+                  <div className="relative z-[1] mt-5 break-words font-display text-3xl font-normal leading-tight text-[color:var(--gold-soft)]">
+                    {value}
                   </div>
-                  <div className="eyebrow mt-2 text-[0.6rem] text-white/45">{l}</div>
+                  <div className="relative z-[1] eyebrow mt-2 text-[0.58rem] text-white/45">
+                    {label}
+                  </div>
                 </div>
-              ))}
-            </div>
-            <div className="mt-8 space-y-5 text-[0.95rem] leading-[1.85] text-white/65">
-              <p>
-                Started in January 2022 with roughly 150 students, nursery through 5th standard,
-                drawn from financially underprivileged families near Lucknow.
-              </p>
-              <p>
-                Beyond core academics, Anandvan teaches life skills and ethics — and for older
-                students, resume-building, interview preparation, and career guidance, with the goal
-                of creating real employment pathways.
-              </p>
-              <div className="flex items-center gap-2 pt-1 text-sm text-white/55">
-                <GraduationCap className="h-4 w-4 text-[color:var(--gold)]" />
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={170}>
+            <div data-fx-item className="impact-story-card relative overflow-hidden">
+              <div className="space-y-5 text-[0.95rem] leading-[1.85] text-white/65">
+                <p>
+                  Started in January 2022 with roughly 150 students, nursery through 5th standard,
+                  drawn from financially underprivileged families near Lucknow.
+                </p>
+                <p>
+                  Beyond core academics, Anandvan teaches life skills and ethics - and for older
+                  students, resume-building, interview preparation, and career guidance, with the
+                  goal of creating real employment pathways.
+                </p>
+              </div>
+
+              <div className="mt-7 flex flex-wrap items-center gap-3">
+                <span className="impact-handle-icon">
+                  <GraduationCap className="h-4 w-4" />
+                </span>
                 <span className="font-medium text-white">@sssanandvan</span>
               </div>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
 
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            {impactPillars.map(({ icon: Icon, title, text }, i) => (
+              <Reveal key={title} delay={220 + i * 80} y={20}>
+                <article data-fx-item className="impact-pillar group relative overflow-hidden">
+                  <span className="impact-pillar-icon">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <h3 className="mt-5 font-sans text-base font-semibold text-white">{title}</h3>
+                  <p className="mt-3 text-xs leading-relaxed text-white/52">{text}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+
+        <div className="impact-gallery">
           {photos.map((p, i) => (
-            <Reveal key={p.src} delay={150 + i * 130}>
-              <figure className="group relative h-full overflow-hidden">
+            <Reveal key={p.src} delay={150 + i * 130} y={26}>
+              <figure
+                data-fx-item
+                className={`impact-photo impact-photo-${i + 1} group relative overflow-hidden`}
+              >
                 <img
                   src={p.src}
                   alt={p.caption}
                   loading="lazy"
-                  className="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="h-full w-full object-contain transition-transform duration-1000 group-hover:scale-[1.03]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[color:var(--navy-deep)] via-[color:var(--navy-deep)]/25 to-transparent" />
-                <figcaption className="absolute inset-x-0 bottom-0 p-5 text-sm leading-snug text-white/85">
+                <div className="impact-photo-overlay pointer-events-none absolute inset-0" />
+                <figcaption className="absolute inset-x-0 bottom-0 z-[1] p-5 text-sm leading-snug text-white/88">
                   {p.caption}
                 </figcaption>
               </figure>
@@ -1025,9 +1392,33 @@ function Impact() {
     </Section>
   );
 }
-
 /* ---------- Press ---------- */
 function Press() {
+  const [activePressImage, setActivePressImage] = useState<null | {
+    src: string;
+    title: string;
+  }>(null);
+
+  useEffect(() => {
+    if (!activePressImage) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActivePressImage(null);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [activePressImage]);
+
   const items = [
     {
       src: imageUrls.pressMarathi,
@@ -1045,39 +1436,92 @@ function Press() {
       sub: "Featured coverage of a community session with children and volunteers.",
     },
   ];
-  return (
-    <Section id="press" className="bg-[color:var(--ivory-deep)]">
-      <Reveal>
-        <Eyebrow>In the Press</Eyebrow>
-      </Reveal>
-      <Reveal delay={80}>
-        <Heading className="mt-6 max-w-2xl">Recognized coverage of the work.</Heading>
-      </Reveal>
 
-      <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
-        {items.map((it, i) => (
-          <Reveal key={it.title} delay={i * 110}>
-            <article className="group h-full bg-white/70 transition-transform duration-500 hover:-translate-y-1">
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src={it.src}
-                  alt={it.title}
-                  loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-7">
-                <div className="eyebrow text-[0.6rem] text-[color:var(--gold-deep)]">Press</div>
-                <h3 className="mt-3 font-display text-xl font-normal leading-snug text-[color:var(--ink)]">
-                  {it.title}
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-[color:var(--ink-soft)]">{it.sub}</p>
-              </div>
-            </article>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
+  return (
+    <>
+      <Section id="press" className="bg-[color:var(--ivory-deep)]">
+        <Reveal>
+          <Eyebrow>In the Press</Eyebrow>
+        </Reveal>
+        <Reveal delay={80}>
+          <Heading className="mt-6 max-w-2xl">Recognized coverage of the work.</Heading>
+        </Reveal>
+
+        <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
+          {items.map((it, i) => (
+            <Reveal key={it.title} delay={i * 110}>
+              <article data-fx-item className="press-card group h-full overflow-hidden bg-white/75">
+                <div className="press-image-wrap relative aspect-[16/11] overflow-hidden bg-[color:var(--navy-deep)] p-3">
+                  <img
+                    src={it.src}
+                    alt={it.title}
+                    loading="lazy"
+                    className="press-image h-full w-full object-contain"
+                  />
+
+                  <button
+                    type="button"
+                    className="press-view-button"
+                    onClick={() => setActivePressImage({ src: it.src, title: it.title })}
+                    aria-label={`View ${it.title} full size`}
+                  >
+                    <Eye className="h-5 w-5" />
+                  </button>
+                </div>
+
+                <div className="p-7">
+                  <div className="eyebrow text-[0.6rem] text-[color:var(--gold-deep)]">Press</div>
+                  <h3 className="mt-3 font-display text-xl font-normal leading-snug text-[color:var(--ink)]">
+                    {it.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[color:var(--ink-soft)]">
+                    {it.sub}
+                  </p>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      {activePressImage && (
+        <div
+          className="press-lightbox fixed inset-0 z-[95] flex items-center justify-center px-4 py-6"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Press image preview"
+        >
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            onClick={() => setActivePressImage(null)}
+            aria-label="Close image preview"
+          />
+
+          <div className="press-lightbox-panel relative z-[1] overflow-hidden bg-[color:var(--navy-deep)]">
+            <button
+              type="button"
+              className="press-lightbox-close"
+              onClick={() => setActivePressImage(null)}
+              aria-label="Close image preview"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <img
+              src={activePressImage.src}
+              alt={activePressImage.title}
+              className="press-lightbox-image w-full object-contain"
+            />
+
+            <div className="border-t border-white/10 px-5 py-4">
+              <div className="eyebrow text-[0.6rem] text-[color:var(--gold-soft)]">Preview</div>
+              <div className="mt-1 font-display text-xl text-white">{activePressImage.title}</div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -1102,56 +1546,106 @@ const episodes = [
 
 function Conversations() {
   return (
-    <Section id="conversations" tone="dark">
-      <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+    <Section id="conversations" tone="dark" className="conversation-section py-16 sm:py-20">
+      <div className="conversation-ambient conversation-ambient-left pointer-events-none absolute rounded-full" />
+      <div className="conversation-ambient conversation-ambient-right pointer-events-none absolute rounded-full" />
+
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
         <Reveal>
           <div>
             <Eyebrow tone="dark">Blogs &amp; Podcasts</Eyebrow>
-            <Heading tone="dark" className="mt-7 max-w-xl">
+            <Heading tone="dark" className="mt-7 max-w-3xl">
               Insights on leadership, technology &amp; building purpose-driven enterprises.
             </Heading>
           </div>
         </Reveal>
+
         <Reveal delay={120}>
-          <div className="lg:pt-24">
-            <p className="max-w-md text-[0.95rem] leading-[1.85] text-white/60">
+          <div data-fx-item className="conversation-intro-card relative overflow-hidden">
+            <div className="eyebrow text-[color:var(--gold-soft)]">Conversation Studio</div>
+            <p className="mt-4 max-w-xl text-[0.95rem] leading-[1.85] text-white/62">
               Gurpreet hosts candid conversations with founders, technologists, and changemakers —
               exploring the questions that don't have clean answers.
             </p>
-            <div className="eyebrow mt-7 inline-flex items-center gap-3 text-[color:var(--gold-soft)]">
-              All conversations
+            <div className="conversation-status mt-7">
+              <span>All conversations</span>
               <span className="h-px w-10 bg-[color:var(--gold)]" />
-              <span className="text-white/40">Coming soon</span>
+              <span>Coming soon</span>
             </div>
           </div>
         </Reveal>
       </div>
 
-      <ul className="mt-16 border-t border-white/10">
-        {episodes.map((e, i) => (
-          <Reveal as="li" key={e.title} delay={i * 90} y={20}>
-            <div className="group flex items-center gap-5 border-b border-white/10 py-7 transition-colors duration-500 hover:bg-white/[0.025] sm:gap-8 sm:py-8">
-              <div className="min-w-0 flex-1">
-                <div className="eyebrow text-[0.6rem] text-[color:var(--gold-soft)]/70">
-                  {e.kicker}
-                </div>
-                <h3 className="mt-2 font-display text-xl font-normal leading-snug text-white sm:text-2xl">
-                  {e.title}
+      <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-[0.88fr_1.12fr] lg:gap-8">
+        <Reveal delay={150}>
+          <div data-fx-item className="conversation-feature relative overflow-hidden">
+            <div className="conversation-feature-grid pointer-events-none absolute inset-0" />
+
+            <div className="relative z-[1] flex items-center justify-between gap-5">
+              <div>
+                <div className="eyebrow text-[color:var(--gold-soft)]">Coming Soon</div>
+                <h3 className="mt-4 font-display text-4xl font-normal leading-tight text-white sm:text-5xl">
+                  Video-led thought leadership.
                 </h3>
-                <div className="mt-2 text-xs uppercase tracking-[0.2em] text-white/35">
-                  {e.meta} · Coming soon
-                </div>
               </div>
-              <span
-                aria-hidden="true"
-                className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-[color:var(--gold)]/40 text-[color:var(--gold-soft)] transition-transform duration-500 group-hover:scale-110 sm:h-12 sm:w-12"
-              >
-                <Mic className="h-4 w-4" />
+
+              <span className="conversation-play">
+                <Video className="h-7 w-7" />
               </span>
             </div>
-          </Reveal>
-        ))}
-      </ul>
+
+            <p className="relative z-[1] mt-7 max-w-md text-sm leading-relaxed text-white/58 sm:text-base">
+              A curated library of conversations on enterprise building, practical technology,
+              values-led leadership, and social impact.
+            </p>
+
+            <div className="relative z-[1] mt-10 grid grid-cols-3 gap-3">
+              {["Leadership", "Technology", "Impact"].map((label) => (
+                <div key={label} className="conversation-signal">
+                  {label}
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
+        <div className="grid grid-cols-1 gap-4">
+          {episodes.map((e, i) => (
+            <Reveal key={e.title} delay={190 + i * 90} y={22}>
+              <article data-fx-item className="conversation-card group relative overflow-hidden">
+                <div className="conversation-card-glow pointer-events-none absolute inset-0" />
+
+                <div className="relative z-[1] flex items-start gap-5">
+                  <span className="conversation-card-icon">
+                    <Video className="h-5 w-5" />
+                  </span>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <div className="eyebrow text-[0.58rem] text-[color:var(--gold-soft)]">
+                        {e.kicker}
+                      </div>
+                      <span className="conversation-pill">Soon</span>
+                    </div>
+
+                    <h3 className="mt-3 font-display text-2xl font-normal leading-snug text-white sm:text-3xl">
+                      {e.title}
+                    </h3>
+
+                    <div className="conversation-card-line" />
+
+                    <div className="text-xs font-semibold uppercase tracking-[0.2em] text-white/35">
+                      {e.meta} · Video Series
+                    </div>
+                  </div>
+
+                  <span className="conversation-index">{String(i + 1).padStart(2, "0")}</span>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </div>
     </Section>
   );
 }
@@ -1160,10 +1654,13 @@ function Conversations() {
 function AppointmentBand() {
   return (
     <section className="relative overflow-hidden bg-[color:var(--navy)] py-16 sm:py-20">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.06]" style={{
-        backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
-        backgroundSize: "48px 48px",
-      }} />
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
+        style={{
+          backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+          backgroundSize: "48px 48px",
+        }}
+      />
       <div className="relative mx-auto max-w-[88rem] px-5 text-center sm:px-8">
         <Reveal>
           <h2 className="font-display text-[clamp(1.9rem,5.5vw,3.5rem)] font-normal uppercase tracking-[0.12em] text-white">
@@ -1253,14 +1750,24 @@ function Contact() {
           <Reveal delay={120}>
             <div className="mt-10 space-y-px border-y border-[color:var(--ink)]/10">
               {[
-                { icon: Mail, label: "Email", value: "gs@kefaru.com", href: "mailto:gs@kefaru.com" },
+                {
+                  icon: Mail,
+                  label: "Email",
+                  value: "gs@kefaru.com",
+                  href: "mailto:gs@kefaru.com",
+                },
                 {
                   icon: Linkedin,
                   label: "LinkedIn",
-                  value: "linkedin.com/in/gurpreet-singh",
-                  href: "https://www.linkedin.com/in/gurpreet-singh",
+                  value: "linkedin.com/in/gurpreet-singh1505",
+                  href: "https://www.linkedin.com/in/gurpreet-singh1505/",
                 },
-                { icon: Phone, label: "Phone", value: "+91 95610 97388", href: "tel:+919561097388" },
+                {
+                  icon: Phone,
+                  label: "Phone",
+                  value: "+91 95610 97388",
+                  href: "tel:+919561097388",
+                },
                 {
                   icon: Building2,
                   label: "Company",
@@ -1297,9 +1804,16 @@ function Contact() {
               </div>
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 {[
-                  { icon: Instagram, href: "#", label: "Anandvan Instagram" },
-                  { icon: Facebook, href: "#", label: "Anandvan Facebook" },
-                  { icon: Twitter, href: "#", label: "Anandvan Twitter" },
+                  {
+                    icon: Instagram,
+                    href: "https://www.instagram.com/sss.anandvan/",
+                    label: "Anandvan Instagram",
+                  },
+                  {
+                    icon: Facebook,
+                    href: "https://www.facebook.com/sssanandvan/",
+                    label: "Anandvan Facebook",
+                  },
                   {
                     icon: Youtube,
                     href: "https://www.youtube.com/@sssanandvan2155",
@@ -1408,7 +1922,12 @@ function Footer() {
           >
             Kefaru Technologies
           </a>
-          <a href="#impact" className="transition-colors hover:text-[color:var(--gold-soft)]">
+          <a
+            href="https://www.sssanandvan.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="transition-colors hover:text-[color:var(--gold-soft)]"
+          >
             Anandvan NGO
           </a>
           <a href="#contact" className="transition-colors hover:text-[color:var(--gold-soft)]">
@@ -1455,39 +1974,76 @@ function useCardHoverMicroInteractions() {
   }, []);
 }
 
+function PortfolioLoader({ exiting }: { exiting: boolean }) {
+  return (
+    <div
+      className={`portfolio-loader fixed inset-0 z-[90] grid place-items-center overflow-hidden bg-[color:var(--navy-deep)] text-white transition-opacity duration-700 ${
+        exiting ? "pointer-events-none opacity-0" : "opacity-100"
+      }`}
+      aria-hidden={exiting}
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_35%,oklch(0.66_0.1_70_/_0.18),transparent_58%)]" />
+      <div className="portfolio-loader-sweep pointer-events-none absolute inset-y-0 left-1/2 w-px bg-[color:var(--gold-soft)]/40" />
+
+      <div className="relative px-6 text-center">
+        <div className="portfolio-loader-mark mx-auto mb-7 h-16 w-16 border border-[color:var(--gold-soft)]/45">
+          <span className="font-script text-5xl leading-none text-[color:var(--gold-soft)]">G</span>
+        </div>
+        <div className="font-script text-6xl leading-none text-[color:var(--gold-soft)] sm:text-7xl">
+          Gurpreet Singh
+        </div>
+        <div className="portfolio-loader-rule mx-auto mt-7 h-px w-56 bg-gradient-to-r from-transparent via-[color:var(--gold-soft)] to-transparent" />
+        <div className="eyebrow mt-6 text-white/55">
+          Building Businesses · Connecting Markets · Creating Impact
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
   useCardHoverMicroInteractions();
   useAdvancedSectionFX();
 
   useEffect(() => {
+    const delay = prefersReducedMotion() ? 250 : 1250;
+    const t = window.setTimeout(() => setLoading(false), delay);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
     const { ScrollTrigger } = ensureGsap();
-    const t1 = window.setTimeout(() => ScrollTrigger.refresh(), 400);
-    const t2 = window.setTimeout(() => ScrollTrigger.refresh(), 1200);
+    const t1 = window.setTimeout(() => ScrollTrigger.refresh(), loading ? 1450 : 400);
+    const t2 = window.setTimeout(() => ScrollTrigger.refresh(), loading ? 2200 : 1200);
     return () => {
       window.clearTimeout(t1);
       window.clearTimeout(t2);
     };
-  }, []);
+  }, [loading]);
 
   return (
-    <main className="min-h-screen bg-[color:var(--ivory)] text-[color:var(--ink)]">
-      <Nav />
-      <Hero />
-      <Story />
-      <QuoteBlock />
-      <Ventures />
-      <Journey />
-      <GlobalReach />
-      <Expertise />
-      <Leadership />
-      <Impact />
-      <Press />
-      <Conversations />
-      <AppointmentBand />
-      <Contact />
-      <Footer />
-      <CallButton />
-      <WhatsAppButton />
-    </main>
+    <>
+      <PortfolioLoader exiting={!loading} />
+      <main className="min-h-screen bg-[color:var(--ivory)] text-[color:var(--ink)]">
+        <Nav />
+        <Hero />
+        <Story />
+        <QuoteBlock />
+        <Ventures />
+        <Journey />
+        <GlobalReach />
+        <Expertise />
+        <Leadership />
+        <Impact />
+        <Press />
+        <Conversations />
+        <Contact />
+        <Footer />
+        <CallButton />
+        <WhatsAppButton />
+      </main>
+    </>
   );
 }
